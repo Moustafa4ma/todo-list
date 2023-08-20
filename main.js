@@ -20,6 +20,10 @@ function create() {
 
 createBtn.onclick = () => {
   create();
+  swal.fire({
+    title: "item added",
+    icon: "success",
+  });
 };
 
 function addTask(taskText) {
