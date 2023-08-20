@@ -13,6 +13,10 @@ getData();
 
 function create() {
   if (input.value !== "") {
+    swal.fire({
+    title: "item added",
+    icon: "success",
+  });
     addTask(input.value);
     input.value = "";
   }
@@ -20,10 +24,7 @@ function create() {
 
 createBtn.onclick = () => {
   create();
-  swal.fire({
-    title: "item added",
-    icon: "success",
-  });
+  
 };
 
 function addTask(taskText) {
