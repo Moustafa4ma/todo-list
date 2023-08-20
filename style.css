@@ -75,6 +75,7 @@ body {
   align-items: center;
   justify-content: center;
   display: flex;
+  place-content: center;
   border: none;
   border-radius: 50%;
   padding: 10px 15px;
@@ -106,6 +107,7 @@ body {
   font-weight: 700;
   margin: 20px;
   text-transform: capitalize;
+  cursor: pointer;
 }
 @media (min-width: 768px) {
   .div {
