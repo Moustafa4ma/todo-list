@@ -10,7 +10,7 @@ body {
   min-height: 100vh;
   flex-direction: column;
 }
-.task {
+.input {
   background-color: #eee;
   outline: none;
   border: none;
@@ -21,22 +21,43 @@ body {
   width: 250px;
   transition: 0.2s;
 }
-.task:focus {
+.input:focus {
   outline: 3px solid royalblue;
 }
-.create {
+.actionBtn {
   border-radius: 16px;
   padding: 10px 20px;
   outline: none;
   width: 100px;
   border: none;
   background-color: royalblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   color: #eee;
   margin: 20px;
   cursor: pointer;
   font-weight: 700;
   text-transform: capitalize;
 }
+#update {
+  display: none;
+}
+.cancel-edit {
+  padding: 10px 20px;
+  outline: none;
+  border-radius: 16px;
+  border: none;
+  background-color: #373737;
+  color: #eee;
+  width: 100px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: capitalize;
+  display: none;
+}
+
 .appTitle {
   margin: 20px;
   font-family: "Font Awesome 6 Free";
@@ -51,14 +72,14 @@ body {
 }
 .div {
   display: flex;
-  width: 200px;
-  margin: 20px 0;
+  width: 100%;
   padding: 10px 20px;
   background-color: white;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   justify-content: space-between;
   align-items: center;
+  grid-column: span 2;
   font-weight: 700;
   position: relative;
 }
@@ -66,20 +87,37 @@ body {
   color: #222;
   font-size: 1.5rem;
 }
-.del {
-  color: #222;
-  outline: none;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  place-content: center;
-  border: none;
+.done {
   border-radius: 50%;
-  padding: 10px 15px;
+  margin-left: 10px;
+  outline: none;
+  border: 1px solid #222;
+  padding: 6px;
   cursor: pointer;
-  font-size: 1.2rem;
+}
+.del {
+  padding: 10px 20px;
+  outline: none;
+  border-radius: 0 0 8px 0;
+  border: none;
+  background-color: #373737;
+  color: #eee;
+  height: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.editBtn {
+  padding: 10px 20px;
+  outline: none;
+  border: none;
+  border-radius: 0 0 0 8px;
+  background-color: royalblue;
+  color: #eee;
+  height: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: capitalize;
 }
 .tasks-div {
   padding: 20px;
@@ -91,10 +129,21 @@ body {
   flex-direction: column;
   align-items: center;
 }
+.taskContainer {
+  width: 200px;
+  margin: 20px 0;
+  min-height: 100px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+}
 .title p {
   font-weight: 500;
   margin: 10px 0;
 }
+
 .delAll {
   width: 200px;
   background-color: royalblue;
@@ -109,10 +158,10 @@ body {
   cursor: pointer;
 }
 @media (min-width: 768px) {
-  .div {
+  .taskContainer {
     width: 600px;
   }
-  .task {
+  .input {
     width: 500px;
   }
   .div h1 {
@@ -120,11 +169,6 @@ body {
   }
   .div p {
     font-size: 1.3rem;
-  }
-  .del {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
   }
   .doneBtn {
     width: 40px;
