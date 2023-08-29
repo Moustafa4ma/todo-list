@@ -1,7 +1,10 @@
 let tasksDiv = document.querySelector(".tasks-div");
-let input = document.querySelector(".task");
-let createBtn = document.querySelector(".create");
+let input = document.querySelector(".input");
+let createBtn = document.getElementById("create");
+let updateBtn = document.getElementById("update");
 let arrayOfTasks = [];
+let form = document.querySelector(".form");
+let cancelEdit = document.getElementById("cancelEdit");
 
 if (localStorage.getItem("tasks")) {
   arrayOfTasks = JSON.parse(localStorage.tasks);
@@ -14,9 +17,9 @@ getData();
 function create() {
   if (input.value !== "") {
     swal.fire({
-    title: "item added",
-    icon: "success",
-  });
+      title: "task added",
+      icon: "success",
+    });
     addTask(input.value);
     input.value = "";
   }
@@ -24,7 +27,6 @@ function create() {
 
 createBtn.onclick = () => {
   create();
-  
 };
 
 function addTask(taskText) {
@@ -35,6 +37,7 @@ function addTask(taskText) {
     id: Date.now(),
     date: nowDate,
     title: taskText,
+    completed: 0,
   };
   arrayOfTasks.push(task);
   tasksToPage(arrayOfTasks);
@@ -44,9 +47,11 @@ function addTask(taskText) {
 function tasksToPage(arrayOfTasks) {
   tasksDiv.innerHTML = "";
   arrayOfTasks.forEach((task) => {
+    let taskContainer = document.createElement("div");
+    taskContainer.classList.add("taskContainer");
     let div = document.createElement("div");
     div.classList.add("div");
-    div.setAttribute("data-id", task.id);
+    taskContainer.setAttribute("data-id", task.id);
 
     let taskDate = document.createElement("p");
     taskDate.innerHTML = task.date;
@@ -54,18 +59,49 @@ function tasksToPage(arrayOfTasks) {
     let title = document.createElement("div");
     title.classList.add("title");
     title.innerHTML = `<h1>${task.title}</h1> <p>${task.date}</p>`;
+    let done = document.createElement("button");
+    done.className = "fa-solid fa-check done";
+    done.addEventListener("click", () => {
+      if (task.completed == 0) {
+        task.completed = 1;
+      } else {
+        task.completed = 0;
+      }
+      tasksToPage(arrayOfTasks);
+      tasksToStorage(arrayOfTasks);
+    });
+    let editBtn = document.createElement("button");
+    editBtn.innerHTML = "edit";
+    editBtn.classList.add("editBtn");
 
-    let delBtn = document.createElement("i");
-    delBtn.className = "fa-regular fa-trash-can del";
-    delBtn.classList.add("del");
+    editBtn.onclick = () => {
+      edit(task, taskContainer);
+      updateBtn.onclick = () => {
+        if (input.value != "") {
+          update(task);
+        }
+      };
+    };
+
+    let delBtn = document.createElement("button");
+    delBtn.className = "del";
+    delBtn.innerHTML = "delete";
     delBtn.onclick = (e) => {
       askForDelete(e.target.parentElement.getAttribute("data-id"));
-      console.log("del");
     };
     div.appendChild(title);
-    div.appendChild(delBtn);
+    div.appendChild(done);
 
-    tasksDiv.appendChild(div);
+    taskContainer.appendChild(div);
+    taskContainer.appendChild(editBtn);
+    taskContainer.appendChild(delBtn);
+
+    tasksDiv.appendChild(taskContainer);
+    if (task.completed == 1) {
+      taskContainer.style.opacity = "0.4";
+      done.style.background = "#09e02d";
+      title.style.textDecoration = "line-through";
+    }
   });
   if (arrayOfTasks.length > 0) {
     let delAll = document.createElement("button");
@@ -85,7 +121,7 @@ function tasksToPage(arrayOfTasks) {
             tasksToPage(arrayOfTasks);
             tasksToStorage(arrayOfTasks);
             swal.fire({
-              title: "all items deleted successfully",
+              title: "all tasks deleted successfully",
               icon: "success",
             });
           } else {
@@ -117,24 +153,52 @@ function del(id) {
 }
 
 function askForDelete(id) {
-  Swal.fire({
-    title: "are you sure ?",
-    icon: "question",
-    showCancelButton: true,
-    cancelButtonText: "No, don't delete",
-    confirmButtonText: "Yes, delete it",
-  }).then((res) => {
-    if (res.isConfirmed) {
-      del(id);
-      Swal.fire({
-        title: "item deleted successfully",
-        icon: "success",
-      });
-    } else {
-      Swal.fire({
-        title: "action cancelled",
-        icon: "error",
-      });
-    }
+  swal
+    .fire({
+      title: "are you sure ?",
+      icon: "question",
+      showCancelButton: true,
+      cancelButtonText: "No, don't delete",
+      confirmButtonText: "Yes, delete it",
+    })
+    .then((res) => {
+      if (res.isConfirmed) {
+        del(id);
+        swal.fire({
+          title: "task deleted successfully",
+          icon: "success",
+        });
+      } else {
+        swal.fire({
+          title: "action cancelled",
+          icon: "error",
+        });
+      }
+    });
+}
+
+function edit(task, taskContainer) {
+  input.value = task.title;
+  createBtn.style.display = "none";
+  updateBtn.style.display = "flex";
+  cancelEdit.style.display = "block";
+  taskContainer.style.opacity = "0.5";
+  cancelEdit.onclick = () => {
+    cancelEdit.style.display = "none";
+    input.value = "";
+    updateBtn.style.display = "none";
+    createBtn.style.display = "block";
+    taskContainer.style.opacity = "1";
+  };
+}
+
+function update(task) {
+  swal.fire({
+    title: "task updated",
+    icon: "success",
   });
+  task.title = input.value;
+  tasksToPage(arrayOfTasks);
+  tasksToStorage(arrayOfTasks);
+  cancelEdit.click();
 }
