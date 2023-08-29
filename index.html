@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="style.css">
     <script src="sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="sweetalert2.min.css">
-    <script src="https://kit.fontawesome.com/74d1157235.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/fontawesome.min.css">
 </head>
 <body>
     <h1 class="appTitle">to<span>do</span> list</h1>
     <div class="form">
-        <input type="text" class="task" spellcheck="false" placeholder="write task title">
-        <input type="submit" class="create" value="add task">
+        <input type="text" class="input" spellcheck="false" placeholder="write task title">
+        <input type="submit" class="actionBtn" id="create" value="add task">
+        <input type="submit" class="actionBtn" id="update" value="update task">
+        <input type="submit" class="cancel-edit" id="cancelEdit" value="cancel">
+        
     </div>
     <div class="tasks-div">
 
